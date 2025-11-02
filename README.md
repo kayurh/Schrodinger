@@ -42,6 +42,21 @@ schrodinger/
 ```
 ---
 
+### 📁 **Description of Files**
+
+| File / Folder              | Purpose                                        |
+| -------------------------- | ---------------------------------------------- |
+| `cli.py`                   | Command-line interface and user input handling |
+| `core.py`                  | Core file-cloning logic                        |
+| `utils.py`                 | Helper and utility functions                   |
+| `test_core.py`             | Unit tests for core logic                      |
+| `test_cli.py`              | Tests for command-line behavior                |
+| `sample_project/`          | Example input files for testing                |
+| `requirements.txt`         | Dependency list                                |
+| `setup.py`                 | Installation and packaging script              |
+
+---
+
 ## 🗓️ 1-Month Development Schedule for “Schrödinger”
 
 This schedule outlines the one-month plan for building and polishing the **Schrödinger CLI** tool — from setup to final release.
