@@ -30,6 +30,7 @@ schrodinger/
 │   ├── cli.py
 │   ├── core.py
 │   └── utils.py
+    └── logger.py
 ├── tests/
 │   ├── test_core.py
 │   └── test_cli.py
@@ -49,11 +50,13 @@ schrodinger/
 | `cli.py`                   | Command-line interface and user input handling |
 | `core.py`                  | Core file-cloning logic                        |
 | `utils.py`                 | Helper and utility functions                   |
+| `logger.py`                | Output instead of print streams              |
 | `test_core.py`             | Unit tests for core logic                      |
 | `test_cli.py`              | Tests for command-line behavior                |
 | `sample_project/`          | Example input files for testing                |
 | `requirements.txt`         | Dependency list                                |
 | `setup.py`                 | Installation and packaging script              |
+
 
 ---
 
