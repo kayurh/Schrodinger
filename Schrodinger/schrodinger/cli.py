@@ -1,46 +1,76 @@
-# For rich implementation
+import argparse
+import re
 from rich.console import Console
 from rich.table import Table
-from rich.progress import track
-import time
-
-# For argparse implementation:
-import argparse
-from rich.console import Console
-from schrodinger.core import clone_directory_structure
-from schrodinger.logger import log
+from schrodinger.core import Schrodinger, parse_extension_argument
 
 console = Console()
 
-def directory_summary(files):
 
-    table = Table(title= "Directory Summary")
-    table.add_column("Extension", justify="center")
-    table.add_column("File Count", justify="right")
-
-    for ext, count in files.items():
-        table.add_row(ext, str(count))
-    console.print(table)
-
-def clone_files(files):
-    console.print("Starting file duplication...")
-
-    for file in track(files, description="Copying files..."):
-        time.sleep(0.1)
-    console.print("Duplication complete!")
-
-# Testing to be implemented later
-# Example output for rich
-files = {".en": 23, ".hu": 19, ".txt": 42}
-directory_summary(files)
-clone_files(range(10))
+def parse_cli_extensions(ext_list):
+    """
+    Convert CLI inputs like:
+        ["en", "hu: HU_"]
+    Into a list suitable for Schrodinger constructor:
+        ["en: \.en$", "hu: HU_"]
+    """
+    parsed = []
+    for ext in ext_list:
+        lang, patterns = parse_extension_argument(ext)
+        # Recombine into string format for Schrodinger
+        regex_strs = " ; ".join(p.pattern for p in patterns)
+        parsed.append(f"{lang}: {regex_strs}")
+    return parsed
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Schrödinger — Clone files into a mirrored folder structure based on extensions."
+        description="Schrodinger — Clone and organize directories by language/regex."
     )
+
+    parser.add_argument(
+        "path",
+        help="Base folder containing files to copy"
+    )
+
+    parser.add_argument(
+        "-v", "--extensions",
+        nargs="+",
+        required=True,
+        help='Language-regex pairs, e.g., "en: \.en$ ; EN_" "hu: HU_"'
+    )
+
+    parser.add_argument(
+        "--full-path",
+        action="store_true",
+        help="Recursively traverse the entire directory tree (currently handled in core)"
+    )
+
+    args = parser.parse_args()
+
+    # Parse extensions for Schrodinger
+    parsed_extensions = parse_cli_extensions(args.extensions)
+
+    # Show execution summary
+    console.rule("[bold cyan]Schrodinger Tool")
+    table = Table(title="Execution Summary")
+    table.add_column("Parameter", style="cyan")
+    table.add_column("Value", style="magenta")
+
+    table.add_row("Base Path", args.path)
+    table.add_row("Extensions", ", ".join(parsed_extensions))
+    table.add_row("Full Path", str(args.full_path))
+
+    console.print(table)
+
+    # Initialize Schrodinger with regex-driven extensions
+    sch = Schrodinger(args.path, parsed_extensions)
+
+    # Run the copying/cloning process
+    sch.run()
+
+    console.print("\n[bold green]✔ Done![/] Your directories are ready.\n")
+
 
 if __name__ == "__main__":
     main()
-

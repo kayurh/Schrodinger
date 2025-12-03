@@ -1,41 +1,35 @@
-import sys
-import logging
+from rich.console import Console
+from rich.logging import RichHandler
 import structlog
+import logging
 
-log = structlog.stdlib.get_logger()
+console = Console()
 
 def configure_logging():
-
-    # Generic Python base logging system (No timestamp yet)
+    """Set up structlog + logging + Rich nicely."""
     logging.basicConfig(
-        format="%(message)s", # To be formatted later
-        stream=sys.stdout, # Standard output in terminal
-        level=logging.INFO, # Log levels (INFO, WARNING, ERROR only)
+        level=logging.INFO,
+        format="%(message)s",
+        handlers=[RichHandler(rich_tracebacks=True)]
     )
 
     structlog.configure(
+        wrapper_class=structlog.make_filtering_bound_logger(logging.INFO),
         processors=[
-            structlog.processors.TimeStamper(fmt="iso"), # ISO 8601 timestamp
+            structlog.processors.TimeStamper(fmt="[%Y-%m-%d %H:%M:%S]"),
             structlog.stdlib.add_log_level,
-            structlog.stdlib.add_logger_name, # Usually 'Schrodinger'
-            structlog.processors.StackInfoRenderer(), # TBD
+            structlog.stdlib.PositionalArgumentsFormatter(),
+            structlog.processors.StackInfoRenderer(),
             structlog.processors.format_exc_info,
-            structlog.processors.KeyValueRenderer(
-                key_order=["event", "source", "destination", "status", "timestamp"]
-            ),
+            structlog.processors.UnicodeDecoder(),
+            structlog.stdlib.ProcessorFormatter.wrap_for_formatter,
         ],
-        wrapper_class=structlog.stdlib.BoundLogger,
         logger_factory=structlog.stdlib.LoggerFactory(),
         cache_logger_on_first_use=True,
     )
 
 
-""""
-To be tested later:
-
-log.info("Copy started", source="./data/en", destination="./output/en")
-
-OUTPUT:
-event="Starting clone" source="./data/en" destination="./output/en" status="in_progress" timestamp="2025-11-02T19:40:00"
-event="Clone complete" source="./data/en" destination="./output/en" status="success" timestamp="2025-11-02T19:40:05"
-"""
+def get_logger(name: str):
+    """Return a structlog logger, ensuring config exists."""
+    configure_logging()
+    return structlog.stdlib.get_logger(name)

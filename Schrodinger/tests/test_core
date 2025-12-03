@@ -1,0 +1,28 @@
+import os
+import shutil
+from schrodinger.core import Schrodinger
+
+def setup_test_dir(tmpdir):
+    base = tmpdir.mkdir("project")
+    (base / "file1.txt").write("hello")
+    (base / "file2.md").write("world")
+    return base
+
+
+def test_clone_structure(tmpdir):
+    base = setup_test_dir(tmpdir)
+    s = Schrodinger(base, ["en", "hu"])
+    s.clone_structure()
+
+    assert os.path.isdir(base / "en")
+    assert os.path.isdir(base / "hu")
+
+
+def test_copy_files(tmpdir):
+    base = setup_test_dir(tmpdir)
+    s = Schrodinger(base, ["en"])
+    s.clone_structure()
+    s.copy_files()
+
+    assert os.path.isfile(base / "en" / "file1.txt")
+    assert os.path.isfile(base / "en" / "file2.md")
