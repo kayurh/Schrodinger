@@ -1,3 +1,5 @@
+README.md
+pyproject.toml
 setup.py
 schrodinger/__init__.py
 schrodinger/cli.py
@@ -8,4 +10,5 @@ schrodinger.egg-info/PKG-INFO
 schrodinger.egg-info/SOURCES.txt
 schrodinger.egg-info/dependency_links.txt
 schrodinger.egg-info/entry_points.txt
+schrodinger.egg-info/requires.txt
 schrodinger.egg-info/top_level.txt
