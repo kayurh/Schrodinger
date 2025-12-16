@@ -137,12 +137,20 @@ Schrodinger path -v "EN_" "HU_" --full-path
 Request from the user "en: REGEX" Where REGEX is hu, HU_, ETC specific and is seperated by ; for example
 Error handling: if the file name or dir has both en and hu ext.
 
+D:/jhkjhkjh/fgdgf/jhgjhgjh/jhkjh.md.hu
+The user might have HU_ Directories and as such every file in it should go to hu
+
+List the files and return path objects (step 1)
+Output and full path or no (step 2) return dict with path object and a regex for extension
+Evaluate the dictionary and label as hu, en, ... (step 3)
+Modular approach and private methods ( _ ...method name )
+
 New directory (en and hu) should be in a separate directory (IE not in "sample_project" but in "examples")
 Files without extension: Copy into every directory
 
 
 [:]:
-i = 0
+            i = 0
             while i < len(dirs):
                 if dirs[i].lower() in self.extensions:
                     dirs.pop(i)
@@ -168,3 +176,7 @@ schrodinger examples/sample_project -v "en: \.en$ ; HU_" "hu: HU_"
 Full Path Test: schrodinger examples/sample_project -v "en: \.en$" "hu: \.hu$" --full-path
 
 
+ERROR: The output folder is in the correct place so thats good.
+But it still copies everthing everywhere and amniguous is still empty
+So I think it is unable to identify the extentions
+Or maybe the logic with entering sub directories (like deep and deeper) is bad

@@ -14,6 +14,3 @@ schrodinger.egg-info/dependency_links.txt
 schrodinger.egg-info/entry_points.txt
 schrodinger.egg-info/requires.txt
 schrodinger.egg-info/top_level.txt
-tests/test_copy.py
-tests/test_enumerate.py
-tests/test_match.py

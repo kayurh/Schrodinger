@@ -1,0 +1,2 @@
+# Schrodinger
+A CLI tool.
