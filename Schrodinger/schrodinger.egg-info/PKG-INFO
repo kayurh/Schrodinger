@@ -3,9 +3,5 @@ Name: schrodinger
 Version: 1.0.0
 Summary: A CLI tool to clone and organize language directory structures.
 Requires-Python: >=3.10
-Description-Content-Type: text/markdown
 Requires-Dist: rich>=13.0.0
 Requires-Dist: structlog>=23.1.0
-
-# Schrodinger
-A CLI tool.
