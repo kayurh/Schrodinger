@@ -1,7 +1,7 @@
 import re
 from pathlib import Path
 
-from schrodinger.core import parse_extension_argument, Schrodinger
+
 
 
 def test_simple_language_defaults_to_extension():

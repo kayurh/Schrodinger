@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from schrodinger.enumerate import _enumerate_paths
+from Schrodinger.schrodinger.phase1 import enumerate_paths
 
 
 def test_enumerate_returns_direct_children_only():
@@ -8,7 +8,7 @@ def test_enumerate_returns_direct_children_only():
 
     root = Path(__file__).parent / "sample_dir"
 
-    items = _enumerate_paths(root)
+    items = enumerate_paths(root)
 
     # Convert Paths to simple string names
     names = sorted([p.as_posix() for p in items])
@@ -30,7 +30,7 @@ def test_paths_are_relative():
     """Returned items must be relative Path objects, not absolute."""
 
     root = Path(__file__).parent / "sample_dir"
-    items = _enumerate_paths(root)
+    items = enumerate_paths(root)
 
     assert len(items) > 0
 
@@ -46,7 +46,7 @@ def test_nonexistent_path_raises():
     nonexistent = Path("this/path/does/not/exist")
 
     try:
-        _enumerate_paths(nonexistent)
+        enumerate_paths(nonexistent)
     except ValueError as e:
         assert "does not exist" in str(e)
     else:
@@ -60,7 +60,7 @@ def test_non_directory_path_raises(tmp_path):
     file_path.write_text("hello", encoding="utf-8")
 
     try:
-        _enumerate_paths(file_path)
+        enumerate_paths(file_path)
     except ValueError as e:
         assert "not a directory" in str(e)
     else:
