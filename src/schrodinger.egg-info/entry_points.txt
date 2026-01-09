@@ -1,0 +1,2 @@
+[console_scripts]
+schrodinger = schrodinger.cli:main

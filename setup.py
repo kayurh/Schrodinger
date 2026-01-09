@@ -3,7 +3,3 @@ import setuptools
 
 if __name__ == "__main__":
     setuptools.setup()
-
-# package_dir={"": "."},
-# packages= setuptools.find_packages(),
-

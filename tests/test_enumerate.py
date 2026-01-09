@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from Schrodinger.schrodinger.phase1 import enumerate_paths
+from schrodinger.phase1 import *
 
 
 def test_enumerate_returns_direct_children_only():
