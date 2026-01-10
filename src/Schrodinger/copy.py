@@ -6,7 +6,7 @@ def copy_directories(
     matched_paths: Dict[Path, List[str]],
     input_root: Path,
     output_dir: Path,
-    all_languages: List[str], 
+    all_languages: List[str],
 ) -> None:
 
     for rel_path, languages in matched_paths.items():

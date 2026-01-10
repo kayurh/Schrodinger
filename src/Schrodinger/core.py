@@ -37,9 +37,9 @@ def parse_extension_argument(ext_arg: str) -> Tuple[str, List[re.Pattern]]:
     return language, compiled_patterns
 
 class Schrodinger:
-    def __init__(self, base_path: Path, extensions: List[str]):
+    def __init__(self, base_path: Path, output_path: Path,extensions: List[str]):
         self.base_path = Path(os.path.abspath(base_path))
-
+        self.output_path = Path(os.path.abspath(output_path))
         if not os.path.isdir(self.base_path):
             raise ValueError(f"Base path does not exist: {self.base_path}")
 
@@ -51,17 +51,10 @@ class Schrodinger:
 
         self.languages = list(self.language_patterns.keys())
 
-        # Output directory
-        project_root = os.path.dirname(self.base_path)  # examples/
-        self.output_root = Path(os.path.abspath(
-            os.path.join(project_root, "..", "output")
-        ))
-        ensure_directory(self.output_root)
-
         logger.info(
             "Initialized Schrodinger",
             base_path=self.base_path,
-            output=self.output_root,
+            output=self.output_path,
             languages=self.languages,
         )
     # Execution
@@ -70,6 +63,6 @@ class Schrodinger:
 
         paths = enumerate_paths(self.base_path)
         matched = match_regexes(paths, self.language_patterns, full_path=False)
-        copy_directories(matched, self.base_path, Path(self.output_root), self.languages)
+        copy_directories(matched, self.base_path, Path(self.output_path), self.languages)
 
         print("\n✔ Done! Your directories are ready.\n")

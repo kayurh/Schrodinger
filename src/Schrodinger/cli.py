@@ -18,6 +18,7 @@ def main():
         "-v", "--extensions", nargs="+", required=True,
         help='Language-regex pairs, e.g. "en: ^EN_ ; \\.en$" "hu: ^HU_ ; \\.hu$"'
     )
+    parser.add_argument("output", help="Output directory path")
 
     args = parser.parse_args()
 
@@ -26,10 +27,11 @@ def main():
     table.add_column("Parameter", style="cyan")
     table.add_column("Value", style="magenta")
     table.add_row("Base Path", args.path)
+    table.add_row("Output Path", args.output)
     table.add_row("Extensions", ", ".join(args.extensions))
     console.print(table)
 
-    sch = Schrodinger(args.path, args.extensions)
+    sch = Schrodinger(args.path, args.output,args.extensions)
     sch.run()
 
 if __name__ == "__main__":
