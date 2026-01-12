@@ -63,6 +63,7 @@ class Schrodinger:
 
         paths = enumerate_paths(self.base_path)
         matched = match_regexes(paths, self.language_patterns, full_path=False)
+        ensure_directory(self.output_path)
         copy_directories(matched, self.base_path, Path(self.output_path), self.languages)
 
         print("\n✔ Done! Your directories are ready.\n")
