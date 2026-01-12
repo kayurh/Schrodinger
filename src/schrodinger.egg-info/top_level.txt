@@ -1,2 +1,4 @@
-build
-schrodinger
+examples
+output
+src
+tests

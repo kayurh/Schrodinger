@@ -24,12 +24,6 @@ src/schrodinger/enumerate.py
 src/schrodinger/logger.py
 src/schrodinger/match.py
 src/schrodinger/utils.py
-src/schrodinger.egg-info/PKG-INFO
-src/schrodinger.egg-info/SOURCES.txt
-src/schrodinger.egg-info/dependency_links.txt
-src/schrodinger.egg-info/entry_points.txt
-src/schrodinger.egg-info/requires.txt
-src/schrodinger.egg-info/top_level.txt
 tests/test_copy.py
 tests/test_enumerate.py
 tests/test_match.py
