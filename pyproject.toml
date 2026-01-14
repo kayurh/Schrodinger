@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "schrodinger"
+version = "1.0.0"
+description = "A CLI tool to clone and organize language directory structures."
+requires-python = ">=3.10"
+dependencies = [
+  "rich>=13.0.0",
+  "structlog>=23.1.0",
+  "pytest"
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.scripts]
+schrodinger = "schrodinger.cli:main"

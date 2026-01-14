@@ -1,0 +1,182 @@
+CORE.PY:
+Does not copy entire directories
+Extracts files based on RegEx, not on string matching
+Correctly skips language folders (en, hu, etc.), hopefully lol
+Preserves subdirectory structure
+Can process arbitrarily nested folders (subdir/dir/file.en)
+Uses structlog.stdlib.get_logger(__name__) not the other one
+Uses rich progress bar
+Uses RegEx correctly separates basename and lang
+Handles Upper-case (.En, .Hu) (Is this a scenario to account for tho?)
+It will only work with specified extensions (Is this ok?)
+
+"yield pauses the function and returns a value to the caller without exiting the function"
+~ChatGPT. Slay or nay?
+
+"is_valid_lang_suffix"
+~Is it needed or has the all-knowing ChatGPT fooled me?
+
+LOGGER.PY:
+Do I need to manually configure the logger with all the extra details?
+
+
+SETUP.PY:
+Is it missing anything?
+
+
+TOML FILE:
+Is it missing anything?
+
+
+
+OLD CLI.PY:
+# For rich implementation
+from rich.table import Table
+from rich.console import Console
+from rich.progress import track
+import time
+
+# For argparse implementation:
+import argparse
+from rich.console import Console
+from schrodinger.core import Schrodinger
+
+
+console = Console()
+
+def directory_summary(files):
+
+    table = Table(title= "Directory Summary")
+    table.add_column("Extension", justify="center")
+    table.add_column("File Count", justify="right")
+
+    for ext, count in files.items():
+        table.add_row(ext, str(count))
+    console.print(table)
+
+def clone_files(files):
+    console.print("Starting file duplication...")
+
+    for file in track(files, description="Copying files..."):
+        time.sleep(0.1)
+    console.print("Duplication complete!")
+
+# Testing to be implemented later
+# Example output for rich
+files = {".en": 23, ".hu": 19, ".txt": 42}
+directory_summary(files)
+clone_files(range(10))
+
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Schrodinger — Clone and organize directory structures by extension."
+    )
+
+    parser.add_argument(
+        "path",
+        help="Base folder containing files to copy",
+    )
+
+    parser.add_argument(
+        "-e", "--extensions",
+        nargs="+",
+        required=True,
+        help="List of target extension folders (ex: en hu fr)"
+    )
+
+    args = parser.parse_args()
+
+    console.rule("[bold cyan]Schrodinger Tool")
+
+    # Show a summary table
+    table = Table(title="Execution Summary")
+    table.add_column("Parameter", style="cyan")
+    table.add_column("Value", style="magenta")
+
+    table.add_row("Base Path", args.path)
+    table.add_row("Extensions", ", ".join(args.extensions))
+
+    console.print(table)
+
+    with console.status("[bold green]Processing...[/]") as status:
+        sch = Schrodinger(args.path, args.extensions)
+        sch.run()
+
+    console.print("\n[bold green]✔ Done![/] Your directories are ready.\n")
+
+if __name__ == "__main__":
+    main()
+
+
+
+
+DESC1:
+        """
+        Performs the actual copy of one file.
+
+        abs_src:     Full path to the source file (C:\Users\...)
+        lang:        Language folder name (e.g. "en")
+        rel_dir:     Relative directory inside base_path (EG subdir\ files\... )
+        output_name: The filename WITHOUT the language suffix
+        """
+
+
+REGEX:
+Should identify any EN, en, *en and in any location, IE EN_File_sem1.pdf and File_sem1_en ...
+
+
+
+TODO:
+pathlib (independent way to write a path by POSIX)
+--full-path: traverse the entire directory and run on everything
+no full path: Only traverse the last one
+abs and relative path in pathlib
+Schrodinger path -v "EN_" "HU_" --full-path
+Request from the user "en: REGEX" Where REGEX is hu, HU_, ETC specific and is seperated by ; for example
+Error handling: if the file name or dir has both en and hu ext.
+
+D:/jhkjhkjh/fgdgf/jhgjhgjh/jhkjh.md.hu
+The user might have HU_ Directories and as such every file in it should go to hu
+
+List the files and return path objects (step 1)
+Output and full path or no (step 2) return dict with path object and a regex for extension
+Evaluate the dictionary and label as hu, en, ... (step 3)
+Modular approach and private methods ( _ ...method name )
+
+New directory (en and hu) should be in a separate directory (IE not in "sample_project" but in "examples")
+Files without extension: Copy into every directory
+
+
+[:]:
+            i = 0
+            while i < len(dirs):
+                if dirs[i].lower() in self.extensions:
+                    dirs.pop(i)
+                else:
+                    i += 1
+
+
+Generate files:
+mkdir -p examples/sample_project/subdir
+echo "EN intro file" > examples/sample_project/intro.txt.en
+echo "HU readme file" > examples/sample_project/readme.md.hu
+echo "Notes for everyone" > examples/sample_project/notes.txt
+echo "EN subdir manual" > examples/sample_project/subdir/manual.pdf.en
+
+Basic Test (Mostly passed): schrodinger examples/sample_project -v "en: \.en$" "hu: \.hu$"
+
+RegEx Variation Test (FAILED) : echo "HU special" > examples/sample_project/HU_file.md
+schrodinger examples/sample_project -v "hu: HU_"
+
+Ambiguous File Test (FAILED): echo "Ambiguous file" > examples/sample_project/HU_ambiguous.en
+schrodinger examples/sample_project -v "en: \.en$ ; HU_" "hu: HU_"
+
+Full Path Test: schrodinger examples/sample_project -v "en: \.en$" "hu: \.hu$" --full-path
+
+
+ERROR: The output folder is in the correct place so thats good.
+But it still copies everthing everywhere and amniguous is still empty
+So I think it is unable to identify the extentions
+Or maybe the logic with entering sub directories (like deep and deeper) is bad
