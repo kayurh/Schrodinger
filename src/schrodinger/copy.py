@@ -28,7 +28,7 @@ def copy_directories(
                         start, end = m.span("del")
                         cleaned_name = cleaned_name[:start] + cleaned_name[end:]
                     else:
-                        cleaned_name = regex.sub("", cleaned_name)
+                        raise ValueError("There was no 'del' group specified in regex.")
                     break
 
             cleaned_rel_path = rel_path.with_name(cleaned_name)
